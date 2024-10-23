@@ -38,17 +38,82 @@ function main() {
   scene.add(grid_base);
 
   const mat_base = new THREE.MeshPhongMaterial({ color: "#888" });
+
+  //wrist(base) mesh
   const mesh_base = new THREE.Mesh(geom, mat_base);
   mesh_base.scale.set(1, 0.5, 1);
   base.add(mesh_base);
 
   base.position.y = mesh_base.scale.y;
 
+  //palm mesh
+  const mesh_palm = new THREE.Mesh(geom, mat_base);
+  mesh_palm.scale.set(3, 4.5, 1);
+  mesh_base.add(mesh_palm);
+
+  mesh_palm.position.y =
+    mesh_base.position.y + mesh_base.scale.y + mesh_palm.scale.y;
+
+  //thumb finger mesh
+  const mesh_thumb = new THREE.Mesh(geom, mat_base);
+  mesh_thumb.scale.set(0.55, 3.5, 0.55);
+  mesh_base.add(mesh_thumb);
+
+  mesh_thumb.position.x = -mesh_palm.scale.x - mesh_thumb.scale.x;
+  mesh_thumb.position.y = mesh_palm.position.y + mesh_palm.scale.y / 6;
+
+  mesh_thumb.rotation.z = THREE.MathUtils.degToRad(10);
+
+  //index finger mesh
+  const mesh_index = new THREE.Mesh(geom, mat_base);
+  mesh_index.scale.set(0.5, 4.5, 0.5);
+  mesh_base.add(mesh_index);
+
+  mesh_index.position.x = -mesh_palm.scale.x + mesh_index.scale.x;
+  mesh_index.position.y =
+    mesh_palm.position.y + mesh_palm.scale.y + mesh_index.scale.y;
+
+  //middle finger mesh
+  const mesh_middle = new THREE.Mesh(geom, mat_base);
+  mesh_middle.scale.set(0.5, 5.5, 0.5);
+  mesh_base.add(mesh_middle);
+
+  mesh_middle.position.x =
+    mesh_index.position.x + ((mesh_palm.scale.x - mesh_middle.scale.x) * 2) / 3;
+  mesh_middle.position.y =
+    mesh_palm.position.y + mesh_palm.scale.y + mesh_middle.scale.y;
+
+  //ring finger mesh
+  const mesh_ring = new THREE.Mesh(geom, mat_base);
+  mesh_ring.scale.set(0.5, 4.5, 0.5);
+  mesh_base.add(mesh_ring);
+
+  mesh_ring.position.x =
+    mesh_middle.position.x +
+    ((mesh_palm.scale.x - mesh_middle.scale.x) * 2) / 3;
+  mesh_ring.position.y =
+    mesh_palm.position.y + mesh_palm.scale.y + mesh_ring.scale.y;
+
+  //small finger mesh
+  const mesh_small = new THREE.Mesh(geom, mat_base);
+  mesh_small.scale.set(0.5, 3.5, 0.5);
+  mesh_base.add(mesh_small);
+
+  mesh_small.position.x = mesh_palm.scale.x - mesh_small.scale.x;
+  mesh_small.position.y =
+    mesh_palm.position.y + mesh_palm.scale.y + mesh_small.scale.y;
+
+  //control
   function onChange(event, ui) {
     let id = event.target.id;
 
     document.querySelector("#log").innerHTML =
       "" + id + ": " + $("#" + id).slider("value");
+
+    if (id === "slider-wrist-twist") {
+      const rotationValue = $("#" + id).slider("value");
+      mesh_base.rotation.y = THREE.MathUtils.degToRad(rotationValue);
+    }
   }
 
   {
