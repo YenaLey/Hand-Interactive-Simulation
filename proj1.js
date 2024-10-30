@@ -52,6 +52,29 @@ function main() {
   mesh_palm.position.y = mesh_palm.scale.y;
   palmPivot.add(mesh_palm);
 
+  // thumb finger
+  const thumbPivot = new THREE.Object3D();
+  thumbPivot.position.y = mesh_palm.scale.y / 1.5;
+  thumbPivot.position.x = -mesh_palm.scale.x - 0.7;
+  thumbPivot.rotation.z = THREE.MathUtils.degToRad(20);
+  palmPivot.add(thumbPivot);
+
+  const mesh_thumb = new THREE.Mesh(geom, mat_base);
+  mesh_thumb.scale.set(0.7, 1.3, 0.7);
+  mesh_thumb.position.y = mesh_thumb.scale.y;
+  thumbPivot.add(mesh_thumb);
+
+  // thumb finger(middle)
+  const thumbMiddlePivot = new THREE.Object3D();
+  thumbMiddlePivot.position.y = mesh_thumb.scale.y * 2;
+  thumbPivot.add(thumbMiddlePivot);
+
+  const mesh_thumb_middle = new THREE.Mesh(geom, mat_base);
+  mesh_thumb_middle.scale.set(0.7, 1.3, 0.7);
+  mesh_thumb_middle.position.y = mesh_thumb_middle.scale.y;
+  thumbMiddlePivot.rotation.z = 0;
+  thumbMiddlePivot.add(mesh_thumb_middle);
+
   // index finger
   const indexPivot = new THREE.Object3D();
   indexPivot.position.y = mesh_palm.scale.y * 2;
@@ -85,29 +108,162 @@ function main() {
   mesh_index_top.position.y = mesh_index_top.scale.y;
   indexTopPivot.add(mesh_index_top);
 
+  // middle finger
+  const middlePivot = new THREE.Object3D();
+  middlePivot.position.y = mesh_palm.scale.y * 2;
+  palmPivot.add(middlePivot);
+
+  const mesh_middle = new THREE.Mesh(geom, mat_base);
+  mesh_middle.scale.set(0.6, 1.1, 0.6);
+  mesh_middle.position.x =
+    mesh_index.position.x + ((mesh_palm.scale.x - mesh_middle.scale.x) * 2) / 3;
+  mesh_middle.position.y = mesh_middle.scale.y;
+  middlePivot.add(mesh_middle);
+
+  // middle finger(middle)
+  const middleMiddlePivot = new THREE.Object3D();
+  middleMiddlePivot.position.y = mesh_middle.scale.y * 2;
+  middlePivot.add(middleMiddlePivot);
+
+  const mesh_middle_middle = new THREE.Mesh(geom, mat_base);
+  mesh_middle_middle.scale.set(0.6, 1.1, 0.6);
+  mesh_middle_middle.position.x =
+    mesh_index.position.x + ((mesh_palm.scale.x - mesh_middle.scale.x) * 2) / 3;
+  mesh_middle_middle.position.y = mesh_middle_middle.scale.y;
+  middleMiddlePivot.add(mesh_middle_middle);
+
+  // middle finger(top)
+  const middleTopPivot = new THREE.Object3D();
+  middleTopPivot.position.y = mesh_middle_middle.scale.y * 2;
+  middleMiddlePivot.add(middleTopPivot);
+
+  const mesh_middle_top = new THREE.Mesh(geom, mat_base);
+  mesh_middle_top.scale.set(0.6, 1.1, 0.6);
+  mesh_middle_top.position.x =
+    mesh_index.position.x + ((mesh_palm.scale.x - mesh_middle.scale.x) * 2) / 3;
+  mesh_middle_top.position.y = mesh_middle_top.scale.y;
+  middleTopPivot.add(mesh_middle_top);
+
+  // ring finger
+  const ringPivot = new THREE.Object3D();
+  ringPivot.position.y = mesh_palm.scale.y * 2;
+  palmPivot.add(ringPivot);
+
+  const mesh_ring = new THREE.Mesh(geom, mat_base);
+  mesh_ring.scale.set(0.6, 0.9, 0.6);
+  mesh_ring.position.x =
+    mesh_middle.position.x + ((mesh_palm.scale.x - mesh_ring.scale.x) * 2) / 3;
+  mesh_ring.position.y = mesh_ring.scale.y;
+  ringPivot.add(mesh_ring);
+
+  // ring finger(middle)
+  const ringMiddlePivot = new THREE.Object3D();
+  ringMiddlePivot.position.y = mesh_ring.scale.y * 2;
+  ringPivot.add(ringMiddlePivot);
+
+  const mesh_ring_middle = new THREE.Mesh(geom, mat_base);
+  mesh_ring_middle.scale.set(0.6, 0.9, 0.6);
+  mesh_ring_middle.position.x =
+    mesh_middle.position.x +
+    ((mesh_palm.scale.x - mesh_middle.scale.x) * 2) / 3;
+  mesh_ring_middle.position.y = mesh_ring_middle.scale.y;
+  ringMiddlePivot.add(mesh_ring_middle);
+
+  // ring finger(top)
+  const ringTopPivot = new THREE.Object3D();
+  ringTopPivot.position.y = mesh_ring_middle.scale.y * 2;
+  ringMiddlePivot.add(ringTopPivot);
+
+  const mesh_ring_top = new THREE.Mesh(geom, mat_base);
+  mesh_ring_top.scale.set(0.6, 0.9, 0.6);
+  mesh_ring_top.position.x =
+    mesh_middle.position.x +
+    ((mesh_palm.scale.x - mesh_middle.scale.x) * 2) / 3;
+  mesh_ring_top.position.y = mesh_ring_top.scale.y;
+  ringTopPivot.add(mesh_ring_top);
+
+  // small finger
+  const smallPivot = new THREE.Object3D();
+  smallPivot.position.y = mesh_palm.scale.y * 2;
+  palmPivot.add(smallPivot);
+
+  const mesh_small = new THREE.Mesh(geom, mat_base);
+  mesh_small.scale.set(0.6, 0.7, 0.6);
+  mesh_small.position.x = mesh_palm.scale.x - mesh_index_top.scale.x;
+  mesh_small.position.y = mesh_small.scale.y;
+  smallPivot.add(mesh_small);
+
+  // small finger(middle)
+  const smallMiddlePivot = new THREE.Object3D();
+  smallMiddlePivot.position.y = mesh_small.scale.y * 2;
+  smallPivot.add(smallMiddlePivot);
+
+  const mesh_small_middle = new THREE.Mesh(geom, mat_base);
+  mesh_small_middle.scale.set(0.6, 0.7, 0.6);
+  mesh_small_middle.position.x = mesh_palm.scale.x - mesh_index_top.scale.x;
+  mesh_small_middle.position.y = mesh_small_middle.scale.y;
+  smallMiddlePivot.add(mesh_small_middle);
+
+  // small finger(top)
+  const smallTopPivot = new THREE.Object3D();
+  smallTopPivot.position.y = mesh_small_middle.scale.y * 2;
+  smallMiddlePivot.add(smallTopPivot);
+
+  const mesh_small_top = new THREE.Mesh(geom, mat_base);
+  mesh_small_top.scale.set(0.6, 0.7, 0.6);
+  mesh_small_top.position.x = mesh_palm.scale.x - mesh_index_top.scale.x;
+  mesh_small_top.position.y = mesh_small_top.scale.y;
+  smallTopPivot.add(mesh_small_top);
+
   // Logging Slider Values
   function onChange(event, ui) {
     let id = event.target.id;
+    const value = $("#" + id).slider("value");
+    const radians = THREE.MathUtils.degToRad(value);
 
     document.querySelector("#log").innerHTML =
       "" + id + ": " + $("#" + id).slider("value");
 
-    if (id === "slider-wrist-bend") {
-      const value = $("#" + id).slider("value");
-      const radians = THREE.MathUtils.degToRad(value);
+    if (id === "slider-wrist-twist") {
+      palmPivot.rotation.y = radians;
+    } else if (id === "slider-wrist-bend") {
       palmPivot.rotation.x = -radians;
+    } else if (id === "slider-thumb-joint2") {
+      thumbPivot.rotation.x = -radians;
+      thumbPivot.rotation.z = THREE.MathUtils.degToRad(20) - radians;
+    } else if (id === "slider-thumb-joint1") {
+      thumbMiddlePivot.rotation.x = -radians;
+      thumbMiddlePivot.rotation.z = -radians;
     } else if (id === "slider-index-joint3") {
-      const value = $("#" + id).slider("value");
-      const radians = THREE.MathUtils.degToRad(value);
       indexPivot.rotation.x = -radians;
     } else if (id === "slider-index-joint2") {
-      const value = $("#" + id).slider("value");
-      const radians = THREE.MathUtils.degToRad(value);
       indexMiddlePivot.rotation.x = -radians;
     } else if (id === "slider-index-joint1") {
-      const value = $("#" + id).slider("value");
-      const radians = THREE.MathUtils.degToRad(value);
       indexTopPivot.rotation.x = -radians;
+    } else if (id === "slider-middle-joint3") {
+      middlePivot.rotation.x = -radians;
+    } else if (id === "slider-middle-joint2") {
+      middleMiddlePivot.rotation.x = -radians;
+    } else if (id === "slider-middle-joint1") {
+      middleTopPivot.rotation.x = -radians;
+    } else if (id === "slider-ring-joint3") {
+      ringPivot.rotation.x = -radians;
+    } else if (id === "slider-ring-joint2") {
+      ringMiddlePivot.rotation.x = -radians;
+    } else if (id === "slider-ring-joint1") {
+      ringTopPivot.rotation.x = -radians;
+    } else if (id === "slider-small-joint3") {
+      smallPivot.rotation.x = -radians;
+    } else if (id === "slider-small-joint2") {
+      smallMiddlePivot.rotation.x = -radians;
+    } else if (id === "slider-small-joint1") {
+      smallTopPivot.rotation.x = -radians;
+    } else if (id === "slider-fingers") {
+      thumbPivot.rotation.z = THREE.MathUtils.degToRad(20) + radians;
+      indexPivot.rotation.z = radians;
+      middlePivot.rotation.z = radians / 2;
+      ringPivot.rotation.z = -radians / 2;
+      smallPivot.rotation.z = -radians;
     }
   }
 
