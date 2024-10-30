@@ -1,6 +1,3 @@
-// https://www.tutorialspoint.com/jquery/jquery-syntax.htm
-// handling document ready event
-
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
@@ -30,89 +27,87 @@ function main() {
   scene.background = new THREE.Color("black");
 
   const geom = new THREE.CylinderGeometry(1, 1, 2, 16);
+  const mat_base = new THREE.MeshPhongMaterial({ color: "#888" });
 
   const base = new THREE.Object3D();
   scene.add(base);
+
   const grid_base = new THREE.GridHelper(30, 30);
   grid_base.renderOrder = 1;
   scene.add(grid_base);
 
-  const mat_base = new THREE.MeshPhongMaterial({ color: "#888" });
-
-  //wrist(base) mesh
   const mesh_base = new THREE.Mesh(geom, mat_base);
   mesh_base.scale.set(1, 0.5, 1);
   base.add(mesh_base);
 
   base.position.y = mesh_base.scale.y;
 
-  //palm mesh
+  // palm
+  const palmPivot = new THREE.Object3D();
+  palmPivot.position.y = mesh_base.scale.y;
+  base.add(palmPivot);
+
   const mesh_palm = new THREE.Mesh(geom, mat_base);
-  mesh_palm.scale.set(3, 4.5, 1);
-  mesh_base.add(mesh_palm);
+  mesh_palm.scale.set(3.8, 3, 1);
+  mesh_palm.position.y = mesh_palm.scale.y;
+  palmPivot.add(mesh_palm);
 
-  mesh_palm.position.y =
-    mesh_base.position.y + mesh_base.scale.y + mesh_palm.scale.y;
+  // index finger
+  const indexPivot = new THREE.Object3D();
+  indexPivot.position.y = mesh_palm.scale.y * 2;
+  palmPivot.add(indexPivot);
 
-  //thumb finger mesh
-  const mesh_thumb = new THREE.Mesh(geom, mat_base);
-  mesh_thumb.scale.set(0.55, 3.5, 0.55);
-  mesh_base.add(mesh_thumb);
-
-  mesh_thumb.position.x = -mesh_palm.scale.x - mesh_thumb.scale.x;
-  mesh_thumb.position.y = mesh_palm.position.y + mesh_palm.scale.y / 6;
-
-  mesh_thumb.rotation.z = THREE.MathUtils.degToRad(10);
-
-  //index finger mesh
   const mesh_index = new THREE.Mesh(geom, mat_base);
-  mesh_index.scale.set(0.5, 4.5, 0.5);
-  mesh_base.add(mesh_index);
-
+  mesh_index.scale.set(0.6, 0.9, 0.6);
   mesh_index.position.x = -mesh_palm.scale.x + mesh_index.scale.x;
-  mesh_index.position.y =
-    mesh_palm.position.y + mesh_palm.scale.y + mesh_index.scale.y;
+  mesh_index.position.y = mesh_index.scale.y;
+  indexPivot.add(mesh_index);
 
-  //middle finger mesh
-  const mesh_middle = new THREE.Mesh(geom, mat_base);
-  mesh_middle.scale.set(0.5, 5.5, 0.5);
-  mesh_base.add(mesh_middle);
+  // index finger(middle)
+  const indexMiddlePivot = new THREE.Object3D();
+  indexMiddlePivot.position.y = mesh_index.scale.y * 2;
+  indexPivot.add(indexMiddlePivot);
 
-  mesh_middle.position.x =
-    mesh_index.position.x + ((mesh_palm.scale.x - mesh_middle.scale.x) * 2) / 3;
-  mesh_middle.position.y =
-    mesh_palm.position.y + mesh_palm.scale.y + mesh_middle.scale.y;
+  const mesh_index_middle = new THREE.Mesh(geom, mat_base);
+  mesh_index_middle.scale.set(0.6, 0.9, 0.6);
+  mesh_index_middle.position.x = -mesh_palm.scale.x + mesh_index_middle.scale.x;
+  mesh_index_middle.position.y = mesh_index_middle.scale.y;
+  indexMiddlePivot.add(mesh_index_middle);
 
-  //ring finger mesh
-  const mesh_ring = new THREE.Mesh(geom, mat_base);
-  mesh_ring.scale.set(0.5, 4.5, 0.5);
-  mesh_base.add(mesh_ring);
+  // index finger(top)
+  const indexTopPivot = new THREE.Object3D();
+  indexTopPivot.position.y = mesh_index_middle.scale.y * 2;
+  indexMiddlePivot.add(indexTopPivot);
 
-  mesh_ring.position.x =
-    mesh_middle.position.x +
-    ((mesh_palm.scale.x - mesh_middle.scale.x) * 2) / 3;
-  mesh_ring.position.y =
-    mesh_palm.position.y + mesh_palm.scale.y + mesh_ring.scale.y;
+  const mesh_index_top = new THREE.Mesh(geom, mat_base);
+  mesh_index_top.scale.set(0.6, 0.9, 0.6);
+  mesh_index_top.position.x = -mesh_palm.scale.x + mesh_index_top.scale.x;
+  mesh_index_top.position.y = mesh_index_top.scale.y;
+  indexTopPivot.add(mesh_index_top);
 
-  //small finger mesh
-  const mesh_small = new THREE.Mesh(geom, mat_base);
-  mesh_small.scale.set(0.5, 3.5, 0.5);
-  mesh_base.add(mesh_small);
-
-  mesh_small.position.x = mesh_palm.scale.x - mesh_small.scale.x;
-  mesh_small.position.y =
-    mesh_palm.position.y + mesh_palm.scale.y + mesh_small.scale.y;
-
-  //control
+  // Logging Slider Values
   function onChange(event, ui) {
     let id = event.target.id;
 
     document.querySelector("#log").innerHTML =
       "" + id + ": " + $("#" + id).slider("value");
 
-    if (id === "slider-wrist-twist") {
-      const rotationValue = $("#" + id).slider("value");
-      mesh_base.rotation.y = THREE.MathUtils.degToRad(rotationValue);
+    if (id === "slider-wrist-bend") {
+      const value = $("#" + id).slider("value");
+      const radians = THREE.MathUtils.degToRad(value);
+      palmPivot.rotation.x = -radians;
+    } else if (id === "slider-index-joint3") {
+      const value = $("#" + id).slider("value");
+      const radians = THREE.MathUtils.degToRad(value);
+      indexPivot.rotation.x = -radians;
+    } else if (id === "slider-index-joint2") {
+      const value = $("#" + id).slider("value");
+      const radians = THREE.MathUtils.degToRad(value);
+      indexMiddlePivot.rotation.x = -radians;
+    } else if (id === "slider-index-joint1") {
+      const value = $("#" + id).slider("value");
+      const radians = THREE.MathUtils.degToRad(value);
+      indexTopPivot.rotation.x = -radians;
     }
   }
 
@@ -147,7 +142,10 @@ function main() {
   function render() {
     if (resizeRendererToDisplaySize(renderer)) {
       const canvas = renderer.domElement;
-      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.left = -size;
+      camera.right = size;
+      camera.top = size;
+      camera.bottom = -size;
       camera.updateProjectionMatrix();
     }
 
@@ -158,7 +156,9 @@ function main() {
 
   requestAnimationFrame(render);
 
+  // Define Sliders
   let sliders = [
+    // Thumb Sliders
     {
       id: "slider-thumb-joint1",
       orientation: "vertical",
@@ -173,6 +173,7 @@ function main() {
       max: 45,
       value: 0,
     },
+    // Index Finger Sliders
     {
       id: "slider-index-joint1",
       orientation: "vertical",
@@ -194,6 +195,7 @@ function main() {
       max: 45,
       value: 0,
     },
+    // Middle Finger Sliders
     {
       id: "slider-middle-joint1",
       orientation: "vertical",
@@ -215,6 +217,7 @@ function main() {
       max: 45,
       value: 0,
     },
+    // Ring Finger Sliders
     {
       id: "slider-ring-joint1",
       orientation: "vertical",
@@ -236,6 +239,7 @@ function main() {
       max: 45,
       value: 0,
     },
+    // Small Finger Sliders
     {
       id: "slider-small-joint1",
       orientation: "vertical",
@@ -257,6 +261,7 @@ function main() {
       max: 45,
       value: 0,
     },
+    // Wrist Bend Slider
     {
       id: "slider-wrist-bend",
       orientation: "vertical",
@@ -264,6 +269,7 @@ function main() {
       max: 45,
       value: 0,
     },
+    // Fingers Slider
     {
       id: "slider-fingers",
       orientation: "horizontal",
@@ -271,6 +277,7 @@ function main() {
       max: 10,
       value: 0,
     },
+    // Wrist Twist Slider
     {
       id: "slider-wrist-twist",
       orientation: "horizontal",
@@ -280,6 +287,7 @@ function main() {
     },
   ];
 
+  // Initialize Sliders
   for (let slider of sliders) {
     $("#" + slider.id).slider({
       orientation: slider.orientation,
