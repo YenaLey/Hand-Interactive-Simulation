@@ -278,7 +278,6 @@ function main() {
       "slider-small-joint2": () => (smallMiddlePivot.rotation.x = -radians),
       "slider-small-joint1": () => (smallTopPivot.rotation.x = -radians),
       "slider-fingers": () => {
-        thumbFingersRotationX = radians * 1.5;
         thumbFingersRotationZ = radians * 1.5;
         indexPivot.rotation.z = radians * 1.5;
         middlePivot.rotation.z = radians * 0.7;
